@@ -1,0 +1,29 @@
+Zadanie 1
+CREATE TABLE postac (id_postaci INTEGER primary_key auto_increment, nazwa VARCHAR(40), rodzaj ENUM('wiking','ptak','kobieta'), data_ur DATE, wiek INTEGER UNSIGNED);
+
+ 
+INSERT INTO postac(nazwa, rodzaj, data_ur, wiek) VALUES
+("Bjorn", "wiking", "2024-10-10", 44),
+("Drozd", "ptak", "2023-02-20", 1),
+("teściowa", "kobieta", "1936-10-23", 8);
+
+UPDATE postac
+set wiek = 88
+where rodzaj='kobieta';
+Zadanie 2
+CREATE TABLE walizka (
+    id_walizki INTEGER PRIMARY KEY AUTO_INCREMENT,
+    pojemnosc INTEGER,
+    kolor ENUM('rozowy', 'czerwony', 'teczowy', 'zolty'),
+    id_wlasciciela INTEGER,
+    FOREIGN KEY (id_wlasciciela) REFERENCES postac(id_postaci) ON DELETE CASCADE
+);
+
+2'.
+ALTER TABLE walizka modify kolor enum('rozowy', 'czerwony', 'teczowy', 'zolty') default'rozowy';
+3'
+insert into walizka (pojemnosc, kolor, id_wlasciciela) values ('3','czerwony','1');
+insert into walizka (pojemnosc, kolor, id_wlasciciela) values ('4','rozowy','3');
+
+
+Zadanie 3
