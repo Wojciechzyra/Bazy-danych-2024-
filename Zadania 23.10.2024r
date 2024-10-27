@@ -24,6 +24,68 @@ ALTER TABLE walizka modify kolor enum('rozowy', 'czerwony', 'teczowy', 'zolty') 
 3'
 insert into walizka (pojemnosc, kolor, id_wlasciciela) values ('3','czerwony','1');
 insert into walizka (pojemnosc, kolor, id_wlasciciela) values ('4','rozowy','3');
-
-
 Zadanie 3
+
+CREATE TABLE izba (
+    adres_budynku VARCHAR(100),
+    nazwa_izby VARCHAR(100),
+    metraz INT UNSIGNED,
+    wlasciciel INT,
+    FOREIGN KEY (wlasciciel) REFERENCES postac(id_postaci) ON DELETE SET NULL,
+    PRIMARY KEY (adres_budynku, nazwa_izby)
+);
+
+ALTER TABLE izba ADD COLUMN kolor VARCHAR(20) DEFAULT 'czarny';
+
+INSERT INTO izba (adres_budynku, nazwa_izby, metraz, wlasciciel) VALUES
+('U Bjorna', 'spiżarnia', 20, (SELECT id_postaci FROM postac WHERE nazwa = 'Bjorn'));
+
+Zadanie 4
+CREATE TABLE przetwory (
+    id_przetworu INT AUTO_INCREMENT PRIMARY KEY,
+    rok_produkcji YEAR DEFAULT 1654,
+    id_wykonawcy INT,
+    zawartosc VARCHAR(100),
+    dodatek VARCHAR(100) DEFAULT 'papryczka chilli',
+    id_konsumenta INT,
+    FOREIGN KEY (id_wykonawcy) REFERENCES postac(id_postaci),
+    FOREIGN KEY (id_konsumenta) REFERENCES postac(id_postaci)
+);
+
+INSERT INTO przetwory (rok_produkcji, id_wykonawcy, zawartosc, dodatek, id_konsumenta) VALUES
+(2024, (SELECT id_postaci FROM postac WHERE nazwa = 'Bjorn'), 'bigos', 'papryczka chilli', (SELECT id_postaci FROM postac WHERE nazwa = 'Teściowa'));
+
+Zadanie 5
+INSERT INTO postac (nazwa, rodzaj, data_ur, wiek) VALUES
+('Wiking1', 'wiking', '1990-01-01', 34),
+('Wiking2', 'wiking', '1985-01-01', 39),
+('Wiking3', 'wiking', '1992-01-01', 32),
+('Wiking4', 'wiking', '1988-01-01', 36),
+('Wiking5', 'wiking', '1995-01-01', 29);
+
+CREATE TABLE statek (
+    nazwa_statku VARCHAR(100) PRIMARY KEY,
+    rodzaj_statku ENUM('dawny', 'nowoczesny'),
+    data_wodowania DATE,
+    max_ladownosc INT UNSIGNED
+);
+
+INSERT INTO statek (nazwa_statku, rodzaj_statku, data_wodowania, max_ladownosc) VALUES
+('Statek1', 'dawny', '1000-01-01', 100),
+('Statek2', 'nowoczesny', '2020-01-01', 200);
+
+ALTER TABLE postac ADD COLUMN funkcja VARCHAR(50);
+
+UPDATE postac SET funkcja = 'kapitan' WHERE nazwa = 'Bjorn';
+
+ALTER TABLE postac ADD COLUMN id_statku VARCHAR(100),
+ADD FOREIGN KEY (id_statku) REFERENCES statek(nazwa_statku);
+
+UPDATE postac SET id_statku = 'Statek1' WHERE rodzaj = 'wiking' LIMIT 3;
+UPDATE postac SET id_statku = 'Statek2' WHERE nazwa = 'Drozd';
+
+DELETE FROM izba WHERE adres_budynku = 'U Bjorna' AND nazwa_izby = 'spiżarnia';
+
+DROP TABLE izba;
+
+
