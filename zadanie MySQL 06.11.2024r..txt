@@ -1,0 +1,12 @@
+ZADANIE 1.
+a)
+DELETE FROM postac WHERE wiek = 39;
+DELETE FROM postac WHERE wiek = 49;
+b)
+ALTER table postac DROP PRIMARY KEY;
+Zadanie 2
+a)
+ALTER TABLE postac ADD pesel VARCHAR(11);
+b)ALTER TABLE postac MODIFY COLUMN rodzaj VARCHAR(50) NOT NULL;
+c)
+INSERT INTO postac (id_postaci, nazwa, rodzaj, data_ur, wiek) VALUES ('9','Gertruda_Nieszczera','syrena','1995-07-01','29');
