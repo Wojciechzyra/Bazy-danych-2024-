@@ -9,4 +9,17 @@ a)
 ALTER TABLE postac ADD pesel VARCHAR(11);
 b)ALTER TABLE postac MODIFY COLUMN rodzaj VARCHAR(50) NOT NULL;
 c)
+Zadanie 3
+a)
 INSERT INTO postac (id_postaci, nazwa, rodzaj, data_ur, wiek) VALUES ('9','Gertruda_Nieszczera','syrena','1995-07-01','29');
+update postac set id_statku = 'Statek1' where nazwa like '%a%';
+b)
+UPDATE statek
+SET max_ladownosc = max_ladownosc * 0.7
+WHERE data_wodowania BETWEEN '1901-01-01' AND '2000-12-31';
+c)
+Select * from postac where wiek <= 1000;
+
+Zadanie 4
+insert into postac Values ('10','Loko','waz','2004-02-10','20','','NULL','');
+Insert into postac (id_postaci, nazwa, rodzaj, data_ur, wiek, funkcja, id_statku, pesel) Values ('10','Loko','waz', '2004-02-10','20',NULL,NULL);
