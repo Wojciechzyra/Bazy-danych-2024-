@@ -20,6 +20,47 @@ WHERE data_wodowania BETWEEN '1901-01-01' AND '2000-12-31';
 c)
 Select * from postac where wiek <= 1000;
 
-Zadanie 4
-insert into postac Values ('10','Loko','waz','2004-02-10','20','','NULL','');
-Insert into postac (id_postaci, nazwa, rodzaj, data_ur, wiek, funkcja, id_statku, pesel) Values ('10','Loko','waz', '2004-02-10','20',NULL,NULL);
+Zadanie 4.
+a)
+insert into postac (id_postaci, nazwa, rodzaj, data_ur, wiek, funkcja, id_statku, pesel)
+values('10','Loko','waz','1954-02-02','20',null,null,null);
+
+b)
+CREATE TABLE marynarz (
+    id_postaci INTEGER PRIMARY KEY AUTO_INCREMENT, -- Klucz główny z automatycznym zwiększaniem
+    nazwa VARCHAR(40),
+    rodzaj VARCHAR(40),
+    data_ur DATE,
+    wiek INTEGER UNSIGNED,
+    funkcja VARCHAR(50),
+    id_statku VARCHAR(100),
+    pesel VARCHAR(11)
+);
+ INSERT INTO marynarz (id_postaci, nazwa, rodzaj, data_ur, wiek, funkcja, id_statku, pesel)
+VALUES (1, 'Bjorn', 'wiking', '2024-10-10', 44, 'kapitan', 'statek1', NULL);
+INSERT INTO marynarz (id_postaci, nazwa, rodzaj, data_ur, wiek, funkcja, id_statku, pesel) 
+VALUES (2, 'drozd', 'ptak', '2023-02-20',  1, '', 'Statek2', NULL);
+INSERT INTO marynarz (id_postaci, nazwa, rodzaj, data_ur, wiek, funkcja, id_statku, pesel) 
+VALUES (3, 'teciowa', 'kobieta', '1936-10-23',  88, '', 'Statek1', NULL);
+INSERT INTO marynarz (id_postaci, nazwa, rodzaj, data_ur, wiek, funkcja, id_statku, pesel) 
+VALUES (4, 'Wiking1', 'wiking', '1990-01-01',  34, '', 'Statek1', NULL);
+c)
+zadanie 5
+a)
+DELETE FROM marynarz
+WHERE id_statku = 'Statek1';
+zadanie b)
+delete from postac where wiek = 29;
+C) + D)
+SET foreign_key_checks = 0;
+DELETE FROM statek WHERE nazwa_statku = 'Statek1';
+SET foreign_key_checks = 1;
+e)
+CREATE TABLE zwierz (
+    id INT AUTO_INCREMENT PRIMARY KEY,  
+    nazwa VARCHAR(255),             
+    wiek INT                         
+);
+d)
+INSERT INTO zwierz (id, nazwa, wiek) Values ('1','drozd','1');
+
