@@ -39,3 +39,18 @@ b)
 select CONCAT (nazwa, '-', rodzaj) as 'nazwa - rodzaj' from kreatura where rodzaj like 'wi%';
 c) 
 select nazwa, rodzaj, (ilosc * waga) AS waga_calkowita from zasob where YEAR(datapozyskania) Between 2000 and 2007;
+
+ZADANIE 5zadanie 1
+
+SELECT 
+    waga * 0.7 AS masa_netto, 
+    waga * 0.3 AS masa_odpadow
+FROM zasob
+WHERE rodzaj = 'jedzenie';
+
+zadanie 2
+select * from zasob where rodzaj is null;
+
+zadanie 3
+
+select distinct rodzaj from zasob where rodzaj like 'Ba%' or rodzaj Like '%os' order by rodzaj asc;
