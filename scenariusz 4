@@ -1,0 +1,10 @@
+SCENARIUSZ 4
+ZADANIA 1
+select avg (waga) from kreatura where rodzaj = 'wiking';
+
+SELECT AVG(waga) AS srednia_waga
+FROM kreatura
+GROUP BY rodzaj;
+
+select avg(dataUr) as sredni_wiek
+from kreatura group by rodzaj; 
