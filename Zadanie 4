@@ -1,0 +1,23 @@
+Zadanie 1
+A)
+select avg(waga) from kreatura where rodzaj = 'wiking';
+
+B)
+SELECT rodzaj, AVG(waga) AS srednia_waga, COUNT(rodzaj) AS ilosc_rekordow
+FROM kreatura
+GROUP BY rodzaj;
+
+C)
+SELECT TIMESTAMPDIFF(YEAR, data_urodzenia, CURDATE()) AS wiek FROM kreatura;
+
+Zadanie 2
+A) SELECT rodzaj, SUM(waga) AS suma_wag
+FROM zasob
+GROUP BY rodzaj;
+
+B)
+SELECT nazwa, AVG(waga) AS srednia_waga, COUNT(*) AS ilosc, SUM(waga) AS suma_wag
+FROM zasob
+GROUP BY nazwa
+HAVING COUNT(*) >= 4 AND SUM(waga) > 10;
+C)
