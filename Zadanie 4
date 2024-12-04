@@ -22,3 +22,65 @@ GROUP BY nazwa
 HAVING COUNT(*) >= 4 AND SUM(waga) > 10;
 C)
 SELECT nazwa from zasob group by nazwa having count(*) >1;
+
+
+Zadanie 3
+a)
+SELECT k.nazwa AS kreatura, z.idZasobu, SUM(z.ilosc) AS ilosc_zasobow
+FROM zasob z
+JOIN kreatura k ON idKreatury = k.idKreatury
+GROUP BY k.nazwa, z.idZasobu;
+b)
+SELECT k.nazwa AS kreatura, GROUP_CONCAT(zb.nazwa ORDER BY zb.nazwa) AS zasoby
+FROM kreatura k
+JOIN zasob z ON k.idKreatury = idKreatury
+JOIN zasob zb ON z.idZasobu = zb.idZasobu
+GROUP BY k.nazwa;
+c)
+SELECT k.nazwa
+FROM kreatura k
+LEFT JOIN zasob z ON k.idKreatury = idKreatury
+WHERE z.idZasobu IS NULL;
+
+Zadanie 4
+a) 
+SELECT w.nazwa AS wiking, z.nazwa AS zasob
+FROM kreatura w
+JOIN ekwipunek e ON w.idKreatury = e.idKreatury
+JOIN zasob z ON e.idZasobu = z.idZasobu
+WHERE w.dataUr BETWEEN '1670-01-01' AND '1679-12-31';
+b) 
+SELECT k.nazwa AS kreatura
+FROM kreatura k
+JOIN ekwipunek e ON k.idKreatury = e.idKreatury
+JOIN zasob z ON e.idZasobu = z.idZasobu
+WHERE z.rodzaj = 'jedzenie'
+ORDER BY k.dataUr DESC
+LIMIT 5;
+c)
+SELECT k1.nazwa AS kreatura_1, k2.nazwa AS kreatura_2
+FROM kreatura k1
+JOIN kreatura k2 ON ABS(k1.idKreatury - k2.idKreatury) = 5;
+Zadanie 5
+a) 
+SELECT k.rodzaj, AVG(z.waga) AS srednia_waga_zasobow
+FROM kreatura k
+JOIN ekwipunek e ON k.idKreatury = e.idKreatury
+JOIN zasob z ON e.idZasobu = z.idZasobu
+WHERE k.rodzaj NOT IN ('małpa', 'wąż')
+GROUP BY k.rodzaj
+HAVING SUM(e.ilosc) < 30;
+b) 
+SELECT 
+    k1.rodzaj,
+    k1.nazwa AS najmłodsza_nazwa,
+    k1.dataUr AS najmłodsza_data_urodzenia,
+    k1.rodzaj AS najmłodszy_rodzaj,
+    k2.nazwa AS najstarsza_nazwa,
+    k2.dataUr AS najstarsza_data_urodzenia,
+    k2.rodzaj AS najstarszy_rodzaj
+FROM kreatura k1
+JOIN kreatura k2 ON k1.rodzaj = k2.rodzaj
+WHERE k1.dataUr= (SELECT MAX(dataUr) FROM kreatura WHERE rodzaj = k1.rodzaj)
+  AND k2.dataUr = (SELECT MIN(dataUr) FROM kreatura WHERE rodzaj = k2.rodzaj);
+
