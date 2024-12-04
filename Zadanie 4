@@ -21,3 +21,4 @@ FROM zasob
 GROUP BY nazwa
 HAVING COUNT(*) >= 4 AND SUM(waga) > 10;
 C)
+SELECT nazwa from zasob group by nazwa having count(*) >1;
