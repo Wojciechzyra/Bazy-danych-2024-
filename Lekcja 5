@@ -1,2 +1,28 @@
-Lekcja 5
-Zadanie 1.
+ insert into zyraw.kreatura select * from wikingowie.kreatura;
+
+ insert into zyraw.uczestnicy select * from wikingowie.uczestnicy;
+
+insert into zyraw.etapy_wyprawy select * from wikingowie.etapy_wyprawy;
+
+insert into zyraw.sektor select * from wikingowie.sektor;
+
+insert into zyraw.wyprawa select * from wikingowie.wyprawa;
+
+2)
+SELECT k.nazwa
+FROM kreatura k
+LEFT JOIN uczestnicy u ON k.idKreatury = u.id_wyprawy 
+WHERE u.id_wyprawy IS NULL; 
+3)
+select wyprawa.nazwa, sum(ekwipunek.ilosc) from wyprawa, kreatura, uczestnicy, ekwipunek where wyprawa.id_wyprawy = uczestnicy.id_wyprawy and uczestnicy.id_uczestnika = kreatura.idKreatury and kreatura.IdKreatury = ekwipunek.idkreatury group by wyprawa.nazwa;
+
+Zadanie 2
+1)
+SELECT w.nazwa, 
+       COUNT(u.id_uczestnika) AS liczba_uczestnikow,
+       GROUP_CONCAT(u.id_uczestnika SEPARATOR ', ') AS uczestnicy
+FROM wyprawa w
+JOIN uczestnicy u ON w.id_wyprawy = u.id_wyprawy  
+GROUP BY w.id_wyprawy, w.nazwa;
+
+2)
