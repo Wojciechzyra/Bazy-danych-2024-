@@ -1,0 +1,140 @@
+Zadanie 1
+(insert)
+DELIMITER $$
+
+CREATE TRIGGER check_waga_before_update
+BEFORE UPDATE ON kreatura
+FOR EACH ROW
+BEGIN
+    -- Sprawdzenie, czy waga jest większa od zera
+    IF NEW.waga <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Waga musi być większa od zera!';
+    END IF;
+END $$
+
+DELIMITER ;
+(update)
+DELIMITER $$
+
+CREATE TRIGGER check_waga_before_update
+BEFORE UPDATE ON kreatura
+FOR EACH ROW
+BEGIN
+    -- Sprawdzenie, czy waga jest większa od zera
+    IF NEW.waga <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Waga musi być większa od zera!';
+    END IF;
+END $$
+
+DELIMITER ;
+
+Zadanie 2
+1.
+CREATE TABLE archiwum_wypraw (
+    id_wyprawy INT PRIMARY KEY,
+    nazwa VARCHAR(255),
+    data_rozpoczecia DATE,
+    data_zakonczenia DATE,
+    kierownik VARCHAR(255)
+);
+2.
+DELIMITER $$
+
+CREATE TRIGGER archiwum_wypraw_trigger
+AFTER DELETE ON wyprawa
+FOR EACH ROW
+BEGIN
+    -- Wstawianie do tabeli archiwum_wypraw po usunięciu z tabeli wyprawa
+    INSERT INTO archiwum_wypraw (id_wyprawy, nazwa, data_rozpoczecia, data_zakonczenia, kierownik)
+    SELECT OLD.id_wyprawy, OLD.nazwa, OLD.data_rozpoczecia, OLD.data_zakonczenia, kreatura.nazwa
+    FROM kreatura
+    WHERE kreatura.idKreatury = OLD.kierownik;  -- Dopasowanie do kierownika
+END $$
+
+DELIMITER ;
+
+Zadanie 3
+DELIMITER $$
+
+CREATE TRIGGER archiwum_wypraw_trigger
+AFTER DELETE ON wyprawa
+FOR EACH ROW
+BEGIN
+    -- Wstawianie do tabeli archiwum_wypraw po usunięciu z tabeli wyprawa
+    INSERT INTO archiwum_wypraw (id_wyprawy, nazwa, data_rozpoczecia, data_zakonczenia, kierownik)
+    SELECT OLD.id_wyprawy, OLD.nazwa, OLD.data_rozpoczecia, OLD.data_zakonczenia, kreatura.nazwa
+    FROM kreatura
+    WHERE kreatura.idKreatury = OLD.idKreatury;
+END $$
+
+DELIMITER;
+Zadanie 4
+1) CREATE TABLE system_alarmowy (
+    id_alarmu INT AUTO_INCREMENT PRIMARY KEY,   
+    wiadomosc VARCHAR(255) NOT NULL             
+);
+2) DELIMITER //
+
+CREATE TRIGGER sprawdz_teściową_domek
+AFTER INSERT ON wyprawa
+FOR EACH ROW
+BEGIN
+    -- Sprawdzamy, czy teściowa bierze udział w tej wyprawie i czy sektor to "domek dziadka"
+    IF EXISTS (
+        SELECT 1
+        FROM uczestnicy u
+        JOIN kreatura k ON u.id_uczestnika = k.idKreatury
+        JOIN etapy_wyprawy ew ON ew.idWyprawy = u.id_wyprawy
+        JOIN sektor s ON ew.sektor = s.id_sektora
+        WHERE u.id_wyprawy = NEW.id_wyprawy
+          AND k.idKreatury = 1  -- zakładamy, że teściowa ma id 1
+          AND s.nazwa = 'Domek dziadka'
+    ) THEN
+        -- Wstawiamy alarm do system_alarmowy
+        INSERT INTO system_alarmowy (wiadomosc)
+        VALUES ('Teściowa nadchodzi !!!');
+    END IF;
+END //
+
+DELIMITER ;
+Zadanie 5
+DELIMITER //
+
+CREATE PROCEDURE eliksir_sily (
+    OUT srednia_udzwigu DECIMAL(10,2),
+    OUT suma_udzwigu DECIMAL(10,2),
+    OUT max_udzwigu DECIMAL(10,2)
+)
+BEGIN
+    -- Obliczenie średniej udźwigu
+    SELECT AVG(udzwig) INTO srednia_udzwigu FROM kreatura;
+
+    -- Obliczenie sumy udźwigu
+    SELECT SUM(udzwig) INTO suma_udzwigu FROM kreatura;
+
+    -- Obliczenie maksymalnego udźwigu
+    SELECT MAX(udzwig) INTO max_udzwigu FROM kreatura;
+END //
+
+DELIMITER ;
+2) DELIMITER //
+
+CREATE PROCEDURE pobierz_sektory (
+    IN wyprawa_id INT
+)
+BEGIN
+    SELECT 
+        CONCAT(sektor.nazwa, ' ', etapy_wyprawy.kolejnosc) AS numer_sektora,
+        sektor.nazwa AS nazwa_sektora
+    FROM 
+        etapy_wyprawy
+    JOIN 
+        sektor ON etapy_wyprawy.sektor = sektor.id_sektora
+    WHERE 
+        etapy_wyprawy.idWyprawy = wyprawa_id
+    ORDER BY 
+        etapy_wyprawy.kolejnosc;
+END //
+
+DELIMITER ;
+
